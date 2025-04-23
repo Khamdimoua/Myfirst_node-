@@ -1,34 +1,17 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/db");
+const express = require('express');
+const router = express.Router();
+const userController = require('../controllers/user_controllers');
 
+// Register a new user
+router.post('/register', userController.create);
 
-const Users = sequelize.define(
+// User login
+router.post('/login', userController.login);
 
-    "users", {
+// Get all users
+router.get('/', userController.getAll);
 
-        id: {
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
-            allowNull: false,
-            primaryKey: true,
-        },
-        userName: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true,
+// Get a specific user by ID
+router.get('/:id', userController.getOne);
 
-        },
-
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false,
-
-        },
-    }
-
-)
-
-module.exports = Users;
-
-// select * from users where id = 1
-// user.find({id: 1})
+module.exports = router;

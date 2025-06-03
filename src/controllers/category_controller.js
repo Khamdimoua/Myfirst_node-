@@ -15,15 +15,15 @@ exports.create = async(req, res) => {
 
 exports.getAll = async(req, res) => {
     try {
-        Categories.findAndCountAll().then((categories) => {
-            res.status(200).send(categories);
-        });
+        const categories = await Categories.findAndCountAll();
+        res.status(200).send(categories);
     } catch (error) {
         res.status(500).send({
-            messageq: error.message,
+            message: error.message,
         });
     }
 };
+
 
 
 exports.getOne = async(req, res) => {

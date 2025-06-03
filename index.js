@@ -1,9 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-require("dotenv").config;
-const userRouter = require('./src/routes/user.routes')
-const product = require('./src/routes/product.routes')
+require("dotenv").config();
 
 
 const app = express();
@@ -15,9 +13,13 @@ app.get('/', (req, res) => {
     res.send('hello world!!');
 });
 
-app.use('', userRouter)
-app.use('', product)
+require("./src/routes/user.routes")(app);
+require("./src/routes/category.routes")(app);
+require("./src/routes/product.routes")(app);
+
+const upload = require("./src/routes/upload.file.rout");
+app.use(upload)
 
 app.listen(port, () => {
     console.log(`server is runing on port ${port}`);
-})
+});

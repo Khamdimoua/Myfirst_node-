@@ -81,3 +81,30 @@ exports.getOne = async(req, res) => {
         });
     }
 };
+
+exports.update = async(req, res) => {
+    try {
+        const hashPassword = await bcrypt.hash(req.body.password, 10);
+        Users.update({...req.body, password: hashPassword }, { where: { id: req.params.id } }).then((_) => {
+            Users.findOne({ where: { id: req.params.id } }).then((user) => {
+                res.status(200).send(user);
+            });
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: error.message,
+        });
+    }
+};
+
+exports.delete = async(req, res) => {
+    try {
+        Users.destroy({ where: { id: req.params.id } }).then((_) => {
+            res.status(200).send({ message: "User has been deleted" });
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: error.message,
+        });
+    }
+};

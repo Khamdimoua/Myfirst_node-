@@ -1,4 +1,3 @@
-const products = require("../models/product.model");
 const Products = require("../models/product.model");
 
 exports.create = async(req, res) => {
@@ -16,25 +15,28 @@ exports.create = async(req, res) => {
 
 exports.getAll = async(req, res) => {
     try {
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 10;
 
-        const page = req.query.page;
-        const limit = req.query.limit;
+        if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+            return res.status(400).json({ message: 'Invalid pagination parameters' });
+        }
 
-        Products.findAndCountAll({
-                offset: limit * (page - 1),
-                limit: parseInt(limit),
-            }
+        const offset = (page - 1) * limit;
 
-
-        ).then((products) => {
-            res.status(200).send(products);
+        const products = await Products.findAndCountAll({
+            offset,
+            limit
         });
+
+        res.status(200).send(products);
     } catch (error) {
         res.status(500).send({
-            messageq: error.message,
+            message: error.message,
         });
     }
 };
+
 
 
 exports.getOne = async(req, res) => {

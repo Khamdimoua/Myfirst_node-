@@ -16,9 +16,13 @@ app.get('/', (req, res) => {
 require("./src/routes/user.routes")(app);
 require("./src/routes/category.routes")(app);
 require("./src/routes/product.routes")(app);
+require("./src/routes/sale.routes")(app);
+require("./src/routes/sale.detail.routes")(app);
 
-const upload = require("./src/routes/upload.file.rout");
-app.use(upload)
+
+
+const upload = require("./src/routes/upload.file.routes");
+app.use('/upload', upload);
 
 app.listen(port, () => {
     console.log(`server is runing on port ${port}`);
